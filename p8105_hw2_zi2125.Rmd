@@ -1,0 +1,13 @@
+---
+title: "Homework 2"
+author: Zaynub Ibrahim
+output: github_document
+---
+
+```{r setup}
+library(tidyverse)
+library(readxl)
+```
+
+##Problem 1
+
