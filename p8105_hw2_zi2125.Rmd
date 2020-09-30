@@ -135,16 +135,29 @@ pols_month = read_csv(file = "./data/pols-month.csv") %>%
         prez_gop == 1 ~ "gop",
         prez_dem == 1 ~ "dem")) %>%
       select(
-        -c(prez_dem, prez_gop, day)
-      )
-   
+        -c(prez_dem, prez_gop, day)) %>%
+    relocate(year, month)
 ```
 
-
+*Clean the snp.csv dataset*
+Separate the date into month and year, change variable types, remove day variable. 
 
 ```{r}
-
+snp = read_csv(file = "./data/snp.csv") %>%
+      janitor::clean_names() %>% 
+    separate(
+      date,
+      c("year", "month", "day")) %>% 
+    mutate(
+      month = month.name[as.factor(month)],
+      year = as.factor(year)) %>% 
+    select (-c(day)) %>%   
+    relocate(year, month)
 ```
+
+*Tidy the unemployment data* 
+
+
 
 
 
