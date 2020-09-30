@@ -7,9 +7,10 @@ output: github_document
 ```{r setup}
 library(tidyverse)
 library(readxl)
+library(dplyr)
 ```
 
-##Problem 1
+## Problem 1
 
 Read the Mr.Trashwheel dataset. 
 
@@ -74,7 +75,7 @@ In 2018, the total precipitation was `r sum(pull(precip_2018, total))`.
 
 In 2017, the median number of sports balls in a dumpster was `r median(pull(filter(trashwheel_df, year == 2017), sports_balls))`.
 
-##Problem 2
+## Problem 2
 
 Read the NYC Transit dataset. Clean data, retain specific variables, and convert variable entry from character to logic. 
 
@@ -86,9 +87,9 @@ transit_data = read_csv(file = "./data/NYC_Transit_Subway_Entrance_And_Exit_Data
    )
 ```
 
-Write a short paragraph about this dataset – explain briefly what variables the dataset contains, describe your data cleaning steps so far, and give the dimension (rows x columns) of the resulting dataset. 
+This dataset contains `r nrow(transit_data)` observations with `r nrow(transit_data)` rows and `r ncol(transit_data)` columns. Variables contained in this dataset are `r names(transit_data)`. The cleaning steps taken so far include changing variable names to snake case, keeping only specific variables using the select function, and changing the entry variable from a character variable to a logical variable using the mutate function.  
 
-The data is not tidy yet since each route is its own variable and some are listed as character variable while others are double vector variables. We need to convert them all to character and then merge into one variable to make it easier to work with. 
+However, despite this cleaning, the data is not tidy yet since each route is its own variable and some are listed as character variable while others are double vector variables. We need to convert them all to character and then merge into one variable to make it easier to work with, using the pivot_longer function. 
 
 ```{r}
 transit_tidy = transit_data %>%
@@ -116,7 +117,34 @@ In this dataset, there are `r distinct(transit_tidy, line, station_name) %>% cou
 There are `r filter (transit_tidy, route_name == "A") %>% distinct(line, station_name) %>% count()` distinct stations that seve the A train and there are `r filter (transit_tidy, route_name == "A") %>% filter(ada == "TRUE") %>% distinct(line, station_name) %>% count()` distinct stations that both serve the A train and are ADA compliant. 
 
 
+## Problem 3
 
+*Clean the pols-month.csv dataset.* 
+Separate the mon variable into three new variables labeled year, month, and day. Create a new president variable and remove prez_gop, prez_dem, and day variables.   
+
+```{r}
+pols_month = read_csv(file = "./data/pols-month.csv") %>%
+      janitor::clean_names() %>% 
+    separate(
+      mon,
+      c("year", "month", "day")) %>% 
+    mutate(
+      month = month.name[as.factor(month)],
+      year = as.factor(year),
+      president = case_when(
+        prez_gop == 1 ~ "gop",
+        prez_dem == 1 ~ "dem")) %>%
+      select(
+        -c(prez_dem, prez_gop, day)
+      )
+   
+```
+
+
+
+```{r}
+
+```
 
 
 
