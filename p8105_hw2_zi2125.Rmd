@@ -70,6 +70,26 @@ left_join(precip_df, month_df, by = "month")
 
 This dataset contains information from the Mr. Trashwheel trash collector in Baltimore, Maryland. As trash enters the inner harbor, the trashwheel collects that trash, and stores it in a dumpster. The dataset contains information on year, month, and trash collected including some specific kinds of trash. There are a total of `r nrow(trashwheel_df)` rows in our final dataset. Additional data sheets include month precipitation data. 
 
+In 2018, the total precipitation was `r sum(pull(precip_2018, total))`. 
+
+In 2017, the median number of sports balls in a dumpster was `r median(pull(filter(trashwheel_df, year == 2017), sports_balls))`.
+
+##Problem 2
+
+Read the NYC Transit dataset. Clean data, retain specific variables, and convert variable entry from character to logic. 
+
+```{r}
+transit_data = read_csv(file = "./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv") %>%
+      janitor::clean_names() %>%
+   select(line:entry, vending, ada) %>%
+   mutate(entry = recode(entry, "YES" = "TRUE", "NO" = "FALSE")
+   )
+```
+
+Write a short paragraph about this dataset – explain briefly what variables the dataset contains, describe your data cleaning steps so far, and give the dimension (rows x columns) of the resulting dataset. Are these data tidy?
+
+
+
 
 
 
