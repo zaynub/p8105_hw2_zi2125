@@ -157,6 +157,19 @@ snp = read_csv(file = "./data/snp.csv") %>%
 
 *Tidy the unemployment data* 
 
+```{r}
+unemployment= read_csv(file = "./data/unemployment.csv") %>%
+      janitor::clean_names()
+  
+unemployment = 
+  pivot_longer(
+    unemployment, 
+    jan:dec,
+    names_to = "month",
+    values_to = "perc_unemployed",
+    )
+```
+
 
 
 
