@@ -129,9 +129,10 @@ pols_month = read_csv(file = "./data/pols-month.csv") %>%
       mon,
       c("year", "month", "day")) %>% 
     mutate(
-      month = month.name[as.factor(month)],
-      year = as.factor(year),
-      president = case_when(
+      month = month.abb[as.factor(month)],
+      year = as.factor(year)) %>% 
+    mutate(
+        president = case_when(
         prez_gop == 1 ~ "gop",
         prez_dem == 1 ~ "dem")) %>%
       select(
@@ -147,27 +148,40 @@ snp = read_csv(file = "./data/snp.csv") %>%
       janitor::clean_names() %>% 
     separate(
       date,
-      c("year", "month", "day")) %>% 
+      c("month", "day", "year")) %>% 
     mutate(
-      month = month.name[as.factor(month)],
+      month = month.abb[as.factor(month)],
       year = as.factor(year)) %>% 
-    select (-c(day)) %>%   
+    select(-c(day)) %>%   
     relocate(year, month)
 ```
 
 *Tidy the unemployment data* 
 
 ```{r}
-unemployment= read_csv(file = "./data/unemployment.csv") %>%
-      janitor::clean_names()
-  
-unemployment = 
-  pivot_longer(
-    unemployment, 
-    jan:dec,
-    names_to = "month",
-    values_to = "perc_unemployed",
-    )
+unemployment = read_csv(file = "./data/unemployment.csv") %>%
+    pivot_longer(
+      !Year,
+      names_to = "month",
+      values_to = "unemployed") %>%
+    mutate(
+      month = as.factor(month),
+      year = as.factor(Year)
+    ) %>% 
+    select(-c(Year)) %>% 
+    relocate(year, month)
+    
+```
+
+*merge datasets* 
+First merge snp into polls_month and then merge unemployment into the result. 
+
+```{r}
+merge_data = 
+  left_join(pols_month, snp, by = c("year","month"))
+
+final_merge = 
+  left_join(merge_data, unemployment, by = c("year", "month"))
 ```
 
 
