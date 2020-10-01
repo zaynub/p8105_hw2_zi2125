@@ -140,6 +140,8 @@ pols_month = read_csv(file = "./data/pols-month.csv") %>%
     relocate(year, month)
 ```
 
+This dataset contains `r nrow(pols_month)` observations with `r nrow(pols_month)` rows and `r ncol(pols_month)` columns. Variables contained in this dataset are `r names(pols_month)`.
+
 *Clean the snp.csv dataset*
 Separate the date into month and year, change variable types, remove day variable. 
 
@@ -155,6 +157,8 @@ snp = read_csv(file = "./data/snp.csv") %>%
     select(-c(day)) %>%   
     relocate(year, month)
 ```
+
+This dataset contains `r nrow(snp)` observations with `r nrow(snp)` rows and `r ncol(snp)` columns. Variables contained in this dataset are `r names(snp)`.
 
 *Tidy the unemployment data* 
 
@@ -173,8 +177,10 @@ unemployment = read_csv(file = "./data/unemployment.csv") %>%
     
 ```
 
+This dataset contains `r nrow(unemployment)` observations with `r nrow(unemployment)` rows and `r ncol(unemployment)` columns. Variables contained in this dataset are `r names(unemployment)`.
+
 *merge datasets* 
-First merge snp into polls_month and then merge unemployment into the result. 
+First merge snp into pols_month and then merge unemployment into the result. 
 
 ```{r}
 merge_data = 
@@ -184,6 +190,7 @@ final_merge =
   left_join(merge_data, unemployment, by = c("year", "month"))
 ```
 
+This final merged dataset contains `r nrow(final_merge)` observations with `r nrow(final_merge)` rows and `r ncol(final_merge)` columns. Variables contained in this dataset are `r names(final_merge)`. The years range from 1947 to 2015. 
 
 
 
